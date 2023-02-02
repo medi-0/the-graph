@@ -1,0 +1,32 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: MediCore
+    network: goerli
+    source:
+      address: "0x89f378972c4173595e52C07A842C2D6F6CA5024B"
+      abi: MediCore
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - CommitedMedicalDocument
+        - RoleAdminChanged
+        - RoleGranted
+        - RoleRevoked
+      abis:
+        - name: MediCore
+          file: ./abis/MediCore.json
+      eventHandlers:
+        - event: CommitedMedicalDocument(indexed address,indexed address,indexed string,string,uint256)
+          handler: handleCommitedMedicalDocument
+        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+          handler: handleRoleAdminChanged
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevoked
+      file: ./src/medi-core.ts
